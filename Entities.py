@@ -1,4 +1,6 @@
 import pygame
+import math
+import Weapons, Timings
 
 
 class Player(pygame.sprite.Sprite):
@@ -8,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         self.original_image = pygame.image.load("./images/Danube_Runabout.png").convert()
         self.image = self.original_image  # This will reference our rotated image.
         self.rect = self.image.get_rect().move(pos)
-        self.angle = 1
+        self.angle = 0
         self.speed = 0
 
     def update(self):
@@ -34,10 +36,25 @@ class Player(pygame.sprite.Sprite):
             if self.speed < 10:
                 self.speed += 1
             print(self.speed)
+        
+        # If the player is pressing the down key, decrease the player's speed.
+        if key[pygame.K_DOWN]:
+            # If the player's speed is greater than 0.
+            if self.speed > 0:
+                self.speed -= 1
+            print(self.speed)
 
     def create_bullet(self):
             # Get the center of the player sprite.
             center_x, center_y = self.rect.center
 
             # Spawn a bullet in the direction the player is facing.
-            return Bullet(center_x, center_y, self.angle)
+            return Weapons.Bullet(center_x, center_y, self.angle, 2, 2, 10, 200, 200)
+
+    def move_forward(self):
+        # Calculate the new position of the player based on the angle and speed
+        radians = math.radians(self.angle)
+        dx = self.speed * math.cos(radians)
+        dy = self.speed * math.sin(radians)
+        self.rect.x += dx
+        self.rect.y -= dy

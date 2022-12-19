@@ -3,7 +3,7 @@ import sys
 import time
 import Weapons, Entities
 
-# Basics
+# Basics.
 pygame.init()
 clock = pygame.time.Clock()
 screen_width, screen_height = 800, 600
@@ -26,9 +26,9 @@ while True:
             pygame.quit()
             sys.exit()
 
-        # If keydown event is space, create a bullet
+        # If keydown event is space, create a bullet.
         if event.type == pygame.KEYDOWN:
-            # If the player presses space and the user event is not already firing
+            # If the player presses space and the user event is not already firing.
             if event.key == pygame.K_SPACE:
                 
                 # Generate a bullet.
@@ -43,6 +43,10 @@ while True:
                 if time_since_last_bullet >= 0.5:
                     bullet_group.add(bullet)
                     last_bullet_time = time.time()
+
+            # If the player is holding down the W key, move the player forward
+            if event.key == pygame.K_UP:
+                player.move_forward()
 
     # Drawing
     screen.fill((0, 0, 0))
