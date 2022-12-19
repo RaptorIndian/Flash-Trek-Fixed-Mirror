@@ -1,6 +1,7 @@
 import pygame
 import math
-import Weapons, Timings
+import threading
+import Weapons
 
 
 class Player(pygame.sprite.Sprite):
@@ -16,6 +17,10 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.image = pygame.transform.rotate(self.original_image, self.angle)
         x, y = self.rect.center  # Save its current center.
+        if self.speed > 0:
+            # Create a thread to move the player forward continuously.
+            t = threading.Thread(target=self.move_forward)
+            t.start()
         self.rect = self.image.get_rect()  # Replace old rect with new rect.
         self.rect.center = (x, y)  # Put the new rect's center at old center.
 
@@ -44,13 +49,6 @@ class Player(pygame.sprite.Sprite):
                 self.speed -= 1
             print(self.speed)
 
-    def create_bullet(self):
-            # Get the center of the player sprite.
-            center_x, center_y = self.rect.center
-
-            # Spawn a bullet in the direction the player is facing.
-            return Weapons.Bullet(center_x, center_y, self.angle, 2, 2, 10, 200, 200)
-
     def move_forward(self):
         # Calculate the new position of the player based on the angle and speed
         radians = math.radians(self.angle)
@@ -58,3 +56,12 @@ class Player(pygame.sprite.Sprite):
         dy = self.speed * math.sin(radians)
         self.rect.x += dx
         self.rect.y -= dy
+
+        return dx, dy
+
+    def create_bullet(self):
+        # Get the center of the player sprite.
+        center_x, center_y = self.rect.center
+
+        # Spawn a bullet in the direction the player is facing.
+        return Weapons.Bullet(center_x, center_y, self.angle, 2, 2, 10, 200, 200)

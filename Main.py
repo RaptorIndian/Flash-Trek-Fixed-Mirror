@@ -28,6 +28,10 @@ while True:
 
         # If keydown event is space, create a bullet.
         if event.type == pygame.KEYDOWN:
+
+            # Save the keys being pressed to a list.
+            keys = pygame.key.get_pressed()
+
             # If the player presses space and the user event is not already firing.
             if event.key == pygame.K_SPACE:
                 
@@ -43,10 +47,6 @@ while True:
                 if time_since_last_bullet >= 0.5:
                     bullet_group.add(bullet)
                     last_bullet_time = time.time()
-
-            # If the player is holding down the W key, move the player forward
-            if event.key == pygame.K_UP:
-                player.move_forward()
 
     # Drawing
     screen.fill((0, 0, 0))
